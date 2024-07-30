@@ -9,7 +9,7 @@ pipeline {
     stage('Checkout') {
       steps {
         sh 'echo passed'
-        git branch: 'main', url: 'https://github.com/Soumyahegdeh/finalcicd.git'
+        git branch: 'main', url: 'https://github.com/Soumyahegdeh/helloworld.git'
       }
     }
     stage('Build and Test') {
@@ -35,34 +35,6 @@ pipeline {
             }
           }
      }
-     stage('Update Deployment File') {
-             environment {
-               GIT_REPO_NAME = "finalcicd"
-               GIT_USER_NAME = "Soumyahegdeh"
-             }
-             
-            steps {
-                withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
-                        sh '''
-                          git config user.email "soumyahegde94@gmail.com"
-                          git config user.name "Soumya Hegde"
-                          BUILD_NUMBER=${BUILD_NUMBER}
-                          # Debugging: Print file content before modification
-                          echo "Before sed:"
-                          cat manifests/deployment.yml
-                    
-                          # Replace placeholder in the deployment file
-                          sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" manifests/deployment.yml
-                    
-                         # Debugging: Print file content after modification
-                           echo "After sed:"
-                           cat manifests/deployment.yml
-                    
-                          git add manifests/deployment.yml
-                          git commit -m "Update deployment image to version ${BUILD_NUMBER}"
-                          git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main '''
-                }
-            }
-        }
+     
    }
 }
