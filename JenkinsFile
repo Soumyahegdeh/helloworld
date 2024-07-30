@@ -19,22 +19,6 @@ pipeline {
         echo "build and test done"
       }
     }
-   stage('Build and Push Docker Image'){
-              environment {
-                DOCKER_IMAGE = "soumyahe/final-cicd:${BUILD_NUMBER}"
-                REGISTRY_CREDENTIALS = credentials('docker-cred')
-            }
-            steps{
-                script {
-                  sh 'cd boot-app && docker build -t ${DOCKER_IMAGE} .'
-                  echo "Image is built"
-                  def dockerImage = docker.image("${DOCKER_IMAGE}")
-                  docker.withRegistry('', "docker-cred") {
-                  dockerImage.push()
-                }
-            }
-          }
-     }
      
    }
 }
