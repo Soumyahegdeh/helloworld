@@ -1,0 +1,68 @@
+pipeline {
+  agent {
+    docker {
+       image 'abhishekf5/maven-abhishek-docker-agent:v1'
+       args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
+    }
+  }
+  stages {
+    stage('Checkout') {
+      steps {
+        sh 'echo passed'
+        git branch: 'main', url: 'https://github.com/Soumyahegdeh/finalcicd.git'
+      }
+    }
+    stage('Build and Test') {
+      steps {
+        sh 'ls -ltr'
+        sh 'cd boot-app && mvn clean package'
+        echo "build and test done"
+      }
+    }
+   stage('Build and Push Docker Image'){
+              environment {
+                DOCKER_IMAGE = "soumyahe/final-cicd:${BUILD_NUMBER}"
+                REGISTRY_CREDENTIALS = credentials('docker-cred')
+            }
+            steps{
+                script {
+                  sh 'cd boot-app && docker build -t ${DOCKER_IMAGE} .'
+                  echo "Image is built"
+                  def dockerImage = docker.image("${DOCKER_IMAGE}")
+                  docker.withRegistry('', "docker-cred") {
+                  dockerImage.push()
+                }
+            }
+          }
+     }
+     stage('Update Deployment File') {
+             environment {
+               GIT_REPO_NAME = "finalcicd"
+               GIT_USER_NAME = "Soumyahegdeh"
+             }
+             
+            steps {
+                withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                        sh '''
+                          git config user.email "soumyahegde94@gmail.com"
+                          git config user.name "Soumya Hegde"
+                          BUILD_NUMBER=${BUILD_NUMBER}
+                          # Debugging: Print file content before modification
+                          echo "Before sed:"
+                          cat manifests/deployment.yml
+                    
+                          # Replace placeholder in the deployment file
+                          sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" manifests/deployment.yml
+                    
+                         # Debugging: Print file content after modification
+                           echo "After sed:"
+                           cat manifests/deployment.yml
+                    
+                          git add manifests/deployment.yml
+                          git commit -m "Update deployment image to version ${BUILD_NUMBER}"
+                          git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main '''
+                }
+            }
+        }
+   }
+}
