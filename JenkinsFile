@@ -28,10 +28,6 @@ pipeline {
                   to: 'soumyavin92@gmail.com',
                   subject: "Build Failed: ${BUILD_NUMBER}",
                   body: """
-                  <p>Build ${BUILD_NUMBER} (${BUILD_NUMBER}) has failed.</p>
-                  <p>Check the build log at: ${BUILD_URL}</p>
-                  <p>Best regards,</p>
-                  <p>Your Jenkins Server</p>
                 )
         }
     }
