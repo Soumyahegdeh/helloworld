@@ -26,7 +26,7 @@ pipeline {
         failure {
             mail(
                   to: 'soumyavin92@gmail.com',
-                  subject: 'Test Email from Jenkins',
+                  subject: 'Test Email from Jenkins on failure',
                   body: 'This is a test email to check if Jenkins can send emails.',
                   mimeType: 'text/plain'
                 )
