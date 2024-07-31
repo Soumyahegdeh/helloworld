@@ -34,5 +34,6 @@
         </configuration>
       </plugin>
     </plugins>
+    <finalName>my-hello</finalName>
   </build>
 </project>
