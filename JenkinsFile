@@ -16,10 +16,24 @@ pipeline {
       steps {
         sh 'ls -ltr'
         sh 'mvn clean package'
-        archiveArtifacts artifacts: 'target/my-hello.jar', followSymlinks: false, onlyIfSuccessful: true
+        archiveArtifacts artifacts: 'my-hello.jar', followSymlinks: false, onlyIfSuccessful: true
         echo "build and test done"
       }
     }
      
    }
-}
+   post {
+        failure {
+            emailext(
+                to: "${soumyavin92@gmail.com}",
+                subject: "Build Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+                body: """
+                <p>Build ${env.JOB_NAME} (${env.BUILD_NUMBER}) has failed.</p>
+                <p>Check the build log at: ${env.BUILD_URL}</p>
+                <p>Best regards,</p>
+                <p>Your Jenkins Server</p>
+                """
+            )
+        }
+    }
+  }
