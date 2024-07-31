@@ -26,9 +26,12 @@ pipeline {
         failure {
             mail(
                   to: 'soumyavin92@gmail.com',
-                  subject: 'Test Email from Jenkins on failure',
-                  body: 'This is a test email to check if Jenkins can send emails.',
-                  mimeType: 'text/plain'
+                  subject: "Build Failed: ${BUILD_NUMBER}",
+                  body: """
+                  <p>Build ${BUILD_NUMBER} (${BUILD_NUMBER}) has failed.</p>
+                  <p>Check the build log at: ${BUILD_URL}</p>
+                  <p>Best regards,</p>
+                  <p>Your Jenkins Server</p>
                 )
         }
     }
