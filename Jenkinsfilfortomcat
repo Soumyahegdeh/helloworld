@@ -21,7 +21,10 @@ pipeline {
       }
     }
     stage('Code Deployment'){
-		deploy adapters: [tomcat9(credentialsId: 'TomcatCreds', path: '', url: 'http://18.192.62.105:8080/')], contextPath: 'myapp', onFailure: false, war: 'target/*.war'
+      steps{
+        deploy adapters: [tomcat9(credentialsId: 'TomcatCreds', path: '', url: 'http://18.192.62.105:8080/')], contextPath: 'myapp', onFailure: false, war: 'target/*.war'
+      }
+		
 	}
      
    }
