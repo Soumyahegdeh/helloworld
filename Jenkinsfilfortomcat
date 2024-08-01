@@ -16,7 +16,7 @@ pipeline {
       steps {
         sh 'ls -ltr'
         sh 'mvn clean package'
-        archiveArtifacts artifacts: 'my-hello.jar', followSymlinks: false, onlyIfSuccessful: true
+        archiveArtifacts artifacts: 'target/my-hello.jar', followSymlinks: false, onlyIfSuccessful: true
         echo "build and test done"
       }
     }
