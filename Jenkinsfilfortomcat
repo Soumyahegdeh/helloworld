@@ -23,18 +23,10 @@ pipeline {
     stage('Code Deployment'){
       steps{
         deploy adapters: [tomcat9(credentialsId: 'TomcatCreds', path: '', url: 'http://18.192.62.105:8080/')], contextPath: 'myapp', onFailure: false, war: 'target/*.jar'
-      }
+       }
 		
-	}
+  }
      
    }
-   post {
-        failure {
-            mail(
-                  to: 'soumyavin92@gmail.com',
-                  subject: "Build Failed: ${BUILD_NUMBER}",
-                  body: 'This is a test email to check if Jenkins can send emails.'
-                )
-        }
-    }
-  }
+  
+}
