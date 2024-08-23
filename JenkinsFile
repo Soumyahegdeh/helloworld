@@ -27,7 +27,7 @@ pipeline {
             mail(
                   to: 'soumyavin92@gmail.com',
                   subject: "Build Failed: ${BUILD_NUMBER}",
-                  body: 'This is a test email to check if Jenkins can send emails.'
+                  body: '$DEFAULT_CONTENT'
                 )
         }
     }
