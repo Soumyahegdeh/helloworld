@@ -27,7 +27,14 @@ pipeline {
             mail(
                   to: 'soumyavin92@gmail.com',
                   subject: "Build Failed: Project ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-                  body: '$DEFAULT_CONTENT'
+                  body: """<p><b>Project:</b> ${env.JOB_NAME}</p>
+                           <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+                           <p><b>Status:</b> FAILED</p>
+                           <p><b>Git Branch:</b> ${env.GIT_BRANCH}</p>
+                           <p><b>Git Commit:</b> ${env.GIT_COMMIT}</p>
+                           <p><b>URL:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                          <p>Please check the Jenkins job for more details.</p>
+                      """
                 )
         }
     }
